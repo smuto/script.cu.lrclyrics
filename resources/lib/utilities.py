@@ -1,5 +1,5 @@
 import sys
-import os
+import os, re
 import chardet
 import unicodedata
 import xbmc, xbmcvfs
@@ -118,7 +118,8 @@ class Song:
     def current():
         song = Song.by_offset(0)
 
-        if not song.artist and not xbmc.getInfoLabel( "MusicPlayer.TimeRemaining"):
+        if not song.artist:
+            log( "Current Song TimeRemaining: %s" % (xbmc.getInfoLabel( "MusicPlayer.TimeRemaining")))
             # no artist and infinite playing time ? We probably listen to a radio
             # which usually set the song title as "Artist - Title" (via ICY StreamTitle)
             sep = song.title.find("-")
@@ -159,7 +160,7 @@ class Song:
             song.filepath = xbmc.getInfoLabel('Player.Filenameandpath')
         song.title = xbmc.getInfoLabel( "MusicPlayer%s.Title" % offset_str)
         song.artist = xbmc.getInfoLabel( "MusicPlayer%s.Artist" % offset_str)
-        if ( song.filepath and ( (not song.title) or (not song.artist) or (__addon__.getSetting( "read_filename" ) == "true") ) ):
+        if ( song.filepath and ( (not song.title) or (__addon__.getSetting( "read_filename" ) == "true") ) ):
             song.artist, song.title = get_artist_from_filename( song.filepath )
 
         return song

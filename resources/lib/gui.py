@@ -347,6 +347,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def getMyPlayer( self ):
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function=self.myPlayerChanged )
+        self.MyMonitor = MyMonitor( function=self.myPlayerChanged )
         self.myPlayerChanged( 2 )
 
     def myPlayerChanged( self, event ):
@@ -404,4 +405,12 @@ class MyPlayer( xbmc.Player ):
         self.function( 1 )
 
     def onPlayBackStarted( self ):
+        self.function( 2 )
+
+class MyMonitor(xbmc.Monitor):
+    def __init__( self, *args, **kwargs ):
+        xbmc.Monitor.__init__( self )
+        self.function = kwargs[ "function" ]
+
+    def onSettingsChanged( self ):
         self.function( 2 )
