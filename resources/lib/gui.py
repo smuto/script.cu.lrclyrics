@@ -136,39 +136,41 @@ class GUI( xbmcgui.WindowXMLDialog ):
         return lyrics
 
     def find_lyrics(self, song):
-        # search embedded lrc lyrics
-        if ( __addon__.getSetting( "search_embedded" ) == "true" ):
-            lyrics = getEmbedLyrics(song, True)
-            if ( lyrics ):
-                log('found embedded lrc lyrics')
-                return lyrics
-        # search lrc lyrics in file
-        if ( __addon__.getSetting( "search_file" ) == "true" ):
-            lyrics = self.get_lyrics_from_file(song, True)
-            if ( lyrics ):
-                log('found lrc lyrics from file')
-                return lyrics
-        # search lrc lyrics by scrapers
-        for scraper in self.scrapers:
-            if scraper[3]:
-                lyrics = scraper[1].get_lyrics( song )
+        # we need only txt file for online radio
+        if xbmc.getCondVisibility('MusicPlayer.HasNext'):
+            # search embedded lrc lyrics
+            if ( __addon__.getSetting( "search_embedded" ) == "true" ):
+                lyrics = getEmbedLyrics(song, True)
                 if ( lyrics ):
-                    log('found lrc lyrics online')
-                    self.save_lyrics_to_file( lyrics )
+                    log('found embedded lrc lyrics')
                     return lyrics
+            # search lrc lyrics in file
+            if ( __addon__.getSetting( "search_file" ) == "true" ):
+                lyrics = self.get_lyrics_from_file(song, True)
+                if ( lyrics ):
+                    log('found lrc lyrics from file')
+                    return lyrics
+            # search lrc lyrics by scrapers
+            for scraper in self.scrapers:
+                if scraper[3]:
+                    lyrics = scraper[1].get_lyrics( song )
+                    if ( lyrics ):
+                        log('found lrc lyrics online')
+                        self.save_lyrics_to_file( lyrics )
+                        return lyrics
 
-        # search embedded txt lyrics
-        if ( __addon__.getSetting( "search_embedded" ) == "true" ):
-            lyrics = getEmbedLyrics(song, False)
-            if lyrics:
-                log('found embedded txt lyrics')
-                return lyrics
-        # search txt lyrics in file
-        if ( __addon__.getSetting( "search_file" ) == "true" ):
-            lyrics = self.get_lyrics_from_file(song, False)
-            if ( lyrics ):
-                log('found txt lyrics from file')
-                return lyrics
+            # search embedded txt lyrics
+            if ( __addon__.getSetting( "search_embedded" ) == "true" ):
+                lyrics = getEmbedLyrics(song, False)
+                if lyrics:
+                    log('found embedded txt lyrics')
+                    return lyrics
+            # search txt lyrics in file
+            if ( __addon__.getSetting( "search_file" ) == "true" ):
+                lyrics = self.get_lyrics_from_file(song, False)
+                if ( lyrics ):
+                    log('found txt lyrics from file')
+                    return lyrics
         # search txt lyrics by scrapers
         for scraper in self.scrapers:
             if not scraper[3]:
