@@ -137,7 +137,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def find_lyrics(self, song):
         # we need only txt file for online radio
-        if xbmc.getCondVisibility('MusicPlayer.HasNext'):
+        if xbmc.getInfoLabel( "MusicPlayer.TimeRemaining") < 15:
             # search embedded lrc lyrics
             if ( __addon__.getSetting( "search_embedded" ) == "true" ):
                 lyrics = getEmbedLyrics(song, True)
