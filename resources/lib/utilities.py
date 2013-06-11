@@ -77,6 +77,7 @@ class Song:
         self.artist = ""
         self.title = ""
         self.filepath = ""
+        self.radio = ""
 
     def __str__(self):
         return "Artist: %s, Title: %s" % ( self.artist, self.title)
@@ -131,6 +132,7 @@ class Song:
                 #  Radio version, short version, year of the song...
                 # It often disturbs the lyrics search so we remove it
                 song.title = re.sub(r'\([^\)]*\)$', '', song.title)
+                song.radio = 'Radio_runing'
 
         log( "Current Song: %s:%s" % (song.artist, song.title))
         return song
